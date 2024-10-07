@@ -54,6 +54,12 @@ public class Ej_completo {
             case 3:
                 start03();
                 break;
+            case 4:
+                start04();
+                break;
+            case 5:
+                start05();
+                break;
         }
     }
     public static void start01() {
@@ -92,8 +98,8 @@ public class Ej_completo {
 
     public static void start02() {
 
-        String ruta = System.getProperty("user.dir") + System.getProperty("file.separator") + "assets";
-
+        String ruta = System.getProperty("user.dir") + System.getProperty("file.separator") + "Manejo de ficheros" + System.getProperty("file.separator") + "assets";
+        System.out.println(System.getProperty("user.dir"));
         File documento = new File(ruta,"restaurantes.csv");
         FileReader lector= null;
         BufferedReader buffer = null;
@@ -114,12 +120,9 @@ public class Ej_completo {
             }
 
 
-        }catch(FileNotFoundException e){
+        } catch(IOException e){
             e.printStackTrace();
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }finally {
+        } finally {
             if(buffer!=null){
                 try{
                     buffer.close();
@@ -152,8 +155,9 @@ public class Ej_completo {
         String conjunto = String.join(",",restaurante,String.valueOf(cp));
 
 
-        String ruta = System.getProperty("user.dir") + System.getProperty("file.separator") + "assets";
+        String ruta = System.getProperty("user.dir") + System.getProperty("file.separator") + "Manejo de ficheros" + System.getProperty("file.separator") + "assets";
         File documento = new File(ruta,"restaurantes.csv");
+
 
 
         FileWriter fichero= null;
@@ -174,6 +178,7 @@ public class Ej_completo {
             if(fichero!=null){
                 try{
                     fichero.close();
+                    menu();
                 }catch (IOException e){
                     e.printStackTrace();
                 }
@@ -190,8 +195,81 @@ public class Ej_completo {
         copia de ese fichero llamada “Restaurants2.csv” que contenga los mismos datos
         excepto aquellos correspondientes a los restaurantes cuyo código postal empieza por 6.
     */
+    public static void start04() {
+        String ruta = System.getProperty("user.dir") + System.getProperty("file.separator") + "Manejo de ficheros" +
+                System.getProperty("file.separator") + "assets";
+        File ficheroParaCopi = new File(ruta,"restaurantes.csv");
+        File ficheroCopiado = new File(ruta,"restaurantes1.csv");
+
+
+        FileWriter fichero= null;
+        PrintWriter escritor = null;
+
+        try{
+            // El segundo parámetro "true" habilita el modo append
+            // LO QUE HACE APPEND ES NO SOBRE ESCRIBIR EL ARCHIVO, SI NO QUE LO CONTINUA(CONCATENA)
+            fichero = new FileWriter(ficheroParaCopi,true);
+            escritor = new PrintWriter(fichero);
+            escritor.println(ficheroCopiado);
+            System.out.println("Copiado");
+
+            System.out.println(ficheroCopiado.exists());
+
+        }catch (IOException e){
+
+            e.printStackTrace();
+
+        }finally{
+            if(fichero!=null){
+                try{
+                    fichero.close();
+                    menu();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
     /*
-        5. Crear un programa en Java que borre el fichero cuya ruta ha sido introducida por el
-        usuario
+        5. Crear un programa en Java que borre el fichero cuya ruta ha sido introducida
+        por el usuario
     */
+
+    public static void start05(){
+        System.out.println(System.getProperty("user.dir"));
+        System.out.println("Introduzca la ruta que desea eliminar");
+        //PONEMOS 2 VECES NEXTLINE PORQUE NECESITA CONSUMIR UN SALTO DE LINE(SI NO LO PUESIERAMOS SALTARIA LA LINEA Y CIERRA PROGRAMA)
+        scan.nextLine();
+        String ruta = scan.nextLine();
+        File documento = new File(ruta);
+
+        if(documento.exists()){
+            if(documento.isDirectory()) {
+                try{
+                System.out.println("El directorio se ha eliminado");
+                documento.deleteOnExit();
+                menu();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }else{
+                try{
+                System.out.println("El archivo ha sido eliminado");
+                documento.delete();
+                menu();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        else {
+            System.out.println("No existe el archivo");
+            menu();
+        }
+
+    }
 }
